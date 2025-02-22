@@ -104,25 +104,29 @@ app.layout = dbc.Container(
             ]
         ),
         dbc.Row(
-            dbc.Col(
-                [
+            [
+                dbc.Col(
+                    html.Div(
+                        id="submit-count-text",
+                        children="Submit Count: 0",
+                        style={"fontSize": 18, "marginTop": "10px"},
+                    ),
+                    width="auto",
+                ),
+                dbc.Col(
                     dbc.Button(
                         id="my-button",
                         children="Submit",
                         n_clicks=0,
                         color="primary",
-                        className="mt-4 fw-bold",
+                        className="fw-bold",
                     ),
-                    html.Div(
-                        "Submit Count: 0",
-                        id="submit-count-text",
-                        style={"fontSize": 18, "textAlign": "right", "marginTop": "10px"},
-                    ),
-                ],
-                width="auto",
-            ),
-            className="justify-content-end",
+                    width="auto",
+                ),
+            ],
+            className="justify-content-end align-items-center mt-4",
         ),
+
         dcc.Store(id="storage", storage_type="session", data={}),
         dcc.Interval(id="timer", interval=1000 * 60, n_intervals=0),
     ]
