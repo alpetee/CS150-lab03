@@ -7,19 +7,21 @@ from pandas_datareader import wb
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+
 indicators = {
     "IT.NET.USER.ZS": "Individuals using the Internet (% of population)",
     "SG.GEN.PARL.ZS": "Proportion of seats held by women in national parliaments (%)",
-    "EN.ATM.CO2E.KT": "CO2 emissions (kt)",
+    "EN.GHG.CO2.ZG.AR5": "Carbon dioxide (CO2) emissions (total) excluding LULUCF (% change from 1990)",
 }
 
 # get country name and ISO id for mapping on choropleth
 countries = wb.get_countries()
-countries["capitalCity"].replace({"": None}, inplace=True)
+countries["capitalCity"] = countries["capitalCity"].replace({"": None})
 countries.dropna(subset=["capitalCity"], inplace=True)
 countries = countries[["name", "iso3c"]]
 countries = countries[countries["name"] != "Kosovo"]
 countries = countries.rename(columns={"name": "country"})
+
 
 
 def update_wb_data():
@@ -29,6 +31,9 @@ def update_wb_data():
     )
     df = df.reset_index()
     df.year = df.year.astype(int)
+
+    print("After reset:\n")
+    print(countries.head().to_string())
 
     # Add country ISO3 id to main df
     df = pd.merge(df, countries, on="country")
@@ -103,7 +108,7 @@ app.layout = dbc.Container(
                             children="Submit",
                             n_clicks=0,
                             color="primary",
-                            className="mt-4",
+                            className="mt-4 fw-bold",
                         ),
                     ],
                     width=6,
